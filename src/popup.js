@@ -18,6 +18,12 @@ const el = {
   fixNote: document.getElementById("fixNote"),
   recentList: document.getElementById("recentList"),
   recentCount: document.getElementById("recentCount"),
+  recentHead: document.getElementById("recentHead"),
+  clearRecent: document.getElementById("clearRecent"),
+  clearConfirm: document.getElementById("clearConfirm"),
+  clearCount: document.getElementById("clearCount"),
+  clearYes: document.getElementById("clearYes"),
+  clearNo: document.getElementById("clearNo"),
   openOptions: document.getElementById("openOptions"),
   prompt: document.getElementById("prompt"),
   promptText: document.getElementById("promptText"),
@@ -331,21 +337,50 @@ async function remember(url) {
   renderRecent();
 }
 
+// Removal is immediate and shown: one link goes on ×, the whole list on the
+// confirmed clear-all. Both just mutate the same history array.
+async function forget(url) {
+  history = history.filter((h) => h.url !== url);
+  await chrome.storage.local.set({ history });
+  renderRecent();
+}
+
+async function clearAllRecent() {
+  history = [];
+  await chrome.storage.local.set({ history });
+  renderRecent();
+}
+
+// The clear-all control is a flip in place: "Clear all" swaps for
+// "Clear N? · Clear · Cancel". Every render resets it to rest so a stale
+// confirm never lingers after the list changes underneath it.
+function resetClearConfirm() {
+  el.clearConfirm.hidden = true;
+  el.clearRecent.hidden = false;
+}
+
 function renderRecent() {
   el.recentCount.textContent = history.length ? `(${history.length})` : "";
+  el.recentHead.hidden = !history.length;
+  resetClearConfirm();
   if (!history.length) {
     el.recentList.innerHTML = `<li class="empty">Links you build will collect here.</li>`;
     return;
   }
   el.recentList.innerHTML = history
-    .map((h, i) => `<li><span class="snip" title="${escapeHtml(h.url)}">${escapeHtml(h.url)}</span><button data-i="${i}">Copy</button></li>`)
+    .map((h, i) => `<li><span class="snip" title="${escapeHtml(h.url)}">${escapeHtml(h.url)}</span>`
+      + `<button class="row-copy" data-i="${i}">Copy</button>`
+      + `<button class="row-del" data-i="${i}" title="Remove this link" aria-label="Remove this link">&times;</button></li>`)
     .join("");
-  el.recentList.querySelectorAll("button").forEach((b) => {
+  el.recentList.querySelectorAll(".row-copy").forEach((b) => {
     b.addEventListener("click", async () => {
       await navigator.clipboard.writeText(history[+b.dataset.i].url);
       b.textContent = "Copied";
       setTimeout(() => { b.textContent = "Copy"; }, 1200);
     });
+  });
+  el.recentList.querySelectorAll(".row-del").forEach((b) => {
+    b.addEventListener("click", () => forget(history[+b.dataset.i].url));
   });
 }
 
@@ -407,6 +442,16 @@ el.reset.addEventListener("click", () => {
   renderPreview();
   inputs.source.focus();
 });
+
+el.clearRecent.addEventListener("click", () => {
+  el.clearCount.textContent = history.length;
+  el.clearRecent.hidden = true;
+  el.clearConfirm.hidden = false;
+});
+
+el.clearNo.addEventListener("click", resetClearConfirm);
+
+el.clearYes.addEventListener("click", () => clearAllRecent());
 
 el.openOptions.addEventListener("click", () => chrome.runtime.openOptionsPage());
 

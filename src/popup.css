@@ -403,6 +403,45 @@ body {
 
 .recent-list button:hover { background: var(--bg-source); }
 
+.recent-list .row-del {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1;
+  padding: 2px 5px;
+}
+
+.recent-list .row-del:hover { color: var(--danger); background: none; }
+
+.recent-head {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  min-height: 20px;
+  margin: 4px 0 2px;
+}
+
+.linkish {
+  font-size: 10.5px;
+  font-weight: 600;
+  color: var(--accent);
+  background: none;
+  border: 0;
+  cursor: pointer;
+  padding: 2px 4px;
+  border-radius: 4px;
+}
+
+.linkish:hover { background: var(--bg-source); }
+.linkish.danger { color: var(--danger); }
+
+.clear-confirm {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10.5px;
+  color: var(--muted);
+}
+
 .empty { font-size: 11px; color: var(--muted); padding: 6px 0; }
 
 :focus-visible {

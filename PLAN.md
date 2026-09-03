@@ -18,6 +18,8 @@ Each card: `ID · title · where the work happens · done-when`
   Follow-up: edit the brief's v0.2.0 "Shipped features" list to match (part of L-07).
 - L-07 · Build last-used restore + fresh/reuse swap · Code · 3 Sep
   Values restore across popup close/open; the prompt slot shows "Reusing your last values · Clear", flipping to "Starting fresh · Use last values" on click. Outstanding: the brief's v0.2.0 "Shipped features" list still needs the matching edit (lives outside this repo).
+- L-14 · Remove recent links: per-item × + clear-all with inline confirm (popup + options) · Code · 3 Sep
+  Popup Recent gains a × on each row (immediate) and a "Clear all" that flips in place to "Clear N? · Clear · Cancel". Options "Clear link history" now arms on first click and reverts if not confirmed. No new permissions or storage keys — only mutates `history`.
 
 ## Doing
 
@@ -63,6 +65,7 @@ Each card: `ID · title · where the work happens · done-when`
 - [ ] Type `facebook-ad` with `facebook-ads` saved → near-duplicate prompt; accepting swaps the value visibly
 - [ ] Non-UTM query params and `#fragment` preserved
 - [ ] `⌘/Ctrl+Enter` copies; history shows the link; options → clear history works
+- [ ] Recent → × removes one row; "Clear all" → confirm empties the list, cancel leaves it; both survive reopen
 - [ ] Options save normalizes and dedupes; "tidied N values" note appears where relevant
 
 ## Decision log

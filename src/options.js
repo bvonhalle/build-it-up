@@ -50,7 +50,27 @@ document.getElementById("restore").addEventListener("click", async () => {
   flash("Defaults restored");
 });
 
-document.getElementById("clearHistory").addEventListener("click", async () => {
+// Clearing history is destructive and silent, so the button asks once: the
+// first click flips it to a confirming state that reverts on its own if left
+// alone, and only the second click within that window wipes the list.
+const clearHistoryBtn = document.getElementById("clearHistory");
+let clearArmed = null;
+
+function disarmClearHistory() {
+  clearTimeout(clearArmed);
+  clearArmed = null;
+  clearHistoryBtn.textContent = "Clear link history";
+  clearHistoryBtn.classList.remove("danger");
+}
+
+clearHistoryBtn.addEventListener("click", async () => {
+  if (!clearArmed) {
+    clearHistoryBtn.textContent = "Confirm clear?";
+    clearHistoryBtn.classList.add("danger");
+    clearArmed = setTimeout(disarmClearHistory, 3000);
+    return;
+  }
+  disarmClearHistory();
   await chrome.storage.local.set({ history: [] });
   flash("History cleared");
 });
