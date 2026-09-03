@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Privacy policy — Build it up</title>
+<style>
+  :root {
+    --surface: #fcfcfe;
+    --panel: #f3f4f9;
+    --ink: #14182a;
+    --muted: #565f78;
+    --line: #e3e5ef;
+    --accent: #3a34c9;
+    --c-source: #3a34c9;
+    --c-medium: #067a6e;
+    --c-campaign: #8a5300;
+    --sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --surface: #14161f;
+      --panel: #1c1f2b;
+      --ink: #eceef6;
+      --muted: #a7aec2;
+      --line: #2b2f3e;
+      --accent: #9d97ff;
+      --c-source: #9d97ff;
+      --c-medium: #55c8b8;
+      --c-campaign: #e0aa5a;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--surface);
+    color: var(--ink);
+    font-family: var(--sans);
+    line-height: 1.6;
+  }
+  main {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 48px 20px 80px;
+  }
+  .wordmark {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    margin: 0 0 40px;
+  }
+  .sigil rect:nth-child(1) { fill: var(--c-source); }
+  .sigil rect:nth-child(2) { fill: var(--c-medium); }
+  .sigil rect:nth-child(3) { fill: var(--c-campaign); }
+  h1 { font-size: 22px; margin: 0 0 4px; }
+  .updated { color: var(--muted); font-size: 13px; margin: 0 0 32px; }
+  h2 { font-size: 15px; margin: 32px 0 10px; }
+  p, li { color: var(--ink); font-size: 14.5px; }
+  ul { padding-left: 20px; margin: 10px 0; }
+  li { margin: 4px 0; }
+  .panel {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 16px 18px;
+    margin: 0 0 8px;
+  }
+  a { color: var(--accent); }
+  code {
+    font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    font-size: 0.9em;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 1px 5px;
+  }
+</style>
+</head>
+<body>
+<main>
+  <p class="wordmark">
+    <svg class="sigil" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true">
+      <rect x="2.5" y="3.2" width="5" height="2.7" rx="1.35"/>
+      <rect x="2.5" y="6.9" width="8" height="2.7" rx="1.35"/>
+      <rect x="2.5" y="10.6" width="11" height="2.7" rx="1.35"/>
+    </svg>
+    Build it up
+  </p>
+
+  <h1>Privacy policy</h1>
+  <p class="updated">Last updated: 3 September 2026</p>
+
+  <p>Build it up is a Chrome extension that generates UTM campaign links from a naming convention you save. This page explains what happens to your data when you use it.</p>
+
+  <h2>Short version</h2>
+  <div class="panel">
+    <p style="margin:0">Build it up does not collect, transmit, or sell any data. Everything you type stays on your computer, in your browser's local storage. There is no account, no server, and no analytics.</p>
+  </div>
+
+  <h2>What the extension does with your data</h2>
+  <ul>
+    <li>Your naming convention (source, medium, campaign, term, content values) is stored locally using Chrome's <code>storage</code> API.</li>
+    <li>Your recent links history (up to 12 entries) is stored the same way, locally only.</li>
+    <li>When you open the popup, the extension reads the URL of your active browser tab once, to prefill the destination field. That URL isn't sent anywhere. It's only saved to your local history if you go on to build and copy a link from it.</li>
+  </ul>
+  <p>None of this ever leaves your device — Build it up has no server to send it to.</p>
+
+  <h2>What we don't do</h2>
+  <ul>
+    <li>No account or sign-in.</li>
+    <li>No analytics, telemetry, or usage tracking.</li>
+    <li>No third-party scripts, trackers, or advertising.</li>
+    <li>No sale or sharing of data with anyone, because none is collected.</li>
+  </ul>
+
+  <h2>Permissions</h2>
+  <ul>
+    <li><strong>activeTab</strong> — reads the URL of the tab you're on when you open the popup, so it can prefill the destination field. It does not grant access to any tab you haven't just opened the popup on.</li>
+    <li><strong>storage</strong> — saves your naming convention and link history locally, so they persist between sessions.</li>
+  </ul>
+  <p>Build it up requests no other permissions.</p>
+
+  <h2>Changes to this policy</h2>
+  <p>If this policy changes, the date at the top will update and the new version will be posted here.</p>
+
+  <h2>Contact</h2>
+  <p>Questions about this policy: <a href="https://github.com/bvonhalle/build-it-up/issues">open an issue on GitHub</a>.</p>
+</main>
+</body>
+</html>
