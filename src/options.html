@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Build it up — naming conventions</title>
+  <link rel="stylesheet" href="popup.css">
+  <link rel="stylesheet" href="options.css">
+</head>
+<body class="opt-body">
+  <div class="wrap">
+    <header class="opt-head">
+      <h1 class="wordmark"><svg class="sigil" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true">
+        <rect x="2.5" y="3.2" width="5" height="2.7" rx="1.35" fill="var(--c-source)"/>
+        <rect x="2.5" y="6.9" width="8" height="2.7" rx="1.35" fill="var(--c-medium)"/>
+        <rect x="2.5" y="10.6" width="11" height="2.7" rx="1.35" fill="var(--c-campaign)"/>
+      </svg>Naming conventions</h1>
+      <p class="lede">These are the values the builder offers you. Keeping the list short is the point — every extra variant splits a campaign's numbers across two rows in your reports.</p>
+    </header>
+
+    <div class="grid">
+      <section class="card" data-key="source">
+        <label for="t-source">Source</label>
+        <p class="help">Where the click comes from: google, newsletter, partner.</p>
+        <textarea id="t-source" spellcheck="false" rows="9"></textarea>
+      </section>
+      <section class="card" data-key="medium">
+        <label for="t-medium">Medium</label>
+        <p class="help">How it reaches them: cpc, email, social.</p>
+        <textarea id="t-medium" spellcheck="false" rows="9"></textarea>
+      </section>
+      <section class="card" data-key="campaign">
+        <label for="t-campaign">Campaign</label>
+        <p class="help">The named push. Grows on its own as you build links.</p>
+        <textarea id="t-campaign" spellcheck="false" rows="9"></textarea>
+      </section>
+      <section class="card" data-key="term">
+        <label for="t-term">Term</label>
+        <p class="help">Paid keyword, when you're tracking one.</p>
+        <textarea id="t-term" spellcheck="false" rows="9"></textarea>
+      </section>
+      <section class="card" data-key="content">
+        <label for="t-content">Content</label>
+        <p class="help">Which creative or placement: hero-cta, footer-link.</p>
+        <textarea id="t-content" spellcheck="false" rows="9"></textarea>
+      </section>
+    </div>
+
+    <footer class="opt-actions">
+      <button id="save" class="primary">Save conventions</button>
+      <button id="restore" class="ghost">Restore defaults</button>
+      <button id="clearHistory" class="ghost">Clear link history</button>
+      <span id="status" class="status" role="status"></span>
+    </footer>
+    <p class="foot-note">One value per line. Everything is lowercased and hyphenated on save, and stored only on this computer.</p>
+  </div>
+  <script src="normalize.js"></script>
+  <script src="options.js"></script>
+</body>
+</html>
