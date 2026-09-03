@@ -337,8 +337,8 @@ async function remember(url) {
   renderRecent();
 }
 
-// Removal is immediate and shown: one link goes on ×, the whole list on the
-// confirmed clear-all. Both just mutate the same history array.
+// Removal is always a confirmed flip, never silent: one link behind the row ×,
+// the whole list behind clear-all. Both just mutate the same history array.
 async function forget(url) {
   history = history.filter((h) => h.url !== url);
   await chrome.storage.local.set({ history });
@@ -369,8 +369,14 @@ function renderRecent() {
   }
   el.recentList.innerHTML = history
     .map((h, i) => `<li><span class="snip" title="${escapeHtml(h.url)}">${escapeHtml(h.url)}</span>`
+      + `<span class="row-actions">`
       + `<button class="row-copy" data-i="${i}">Copy</button>`
-      + `<button class="row-del" data-i="${i}" title="Remove this link" aria-label="Remove this link">&times;</button></li>`)
+      + `<button class="row-del" data-i="${i}" title="Remove this link" aria-label="Remove this link">&times;</button>`
+      + `</span>`
+      + `<span class="row-confirm" hidden>`
+      + `<button class="linkish danger row-yes" data-i="${i}">Remove</button>`
+      + `<button class="linkish row-no" type="button">Cancel</button>`
+      + `</span></li>`)
     .join("");
   el.recentList.querySelectorAll(".row-copy").forEach((b) => {
     b.addEventListener("click", async () => {
@@ -379,8 +385,32 @@ function renderRecent() {
       setTimeout(() => { b.textContent = "Copy"; }, 1200);
     });
   });
+  // The row × flips that one row in place — "Remove · Cancel" — the same
+  // two-step as clear-all, so no removal is silent. Only one row confirms at a
+  // time; opening a new one closes any other.
   el.recentList.querySelectorAll(".row-del").forEach((b) => {
+    b.addEventListener("click", () => {
+      resetRowConfirms();
+      const li = b.closest("li");
+      li.querySelector(".row-actions").hidden = true;
+      li.querySelector(".row-confirm").hidden = false;
+    });
+  });
+  el.recentList.querySelectorAll(".row-no").forEach((b) => {
+    b.addEventListener("click", () => resetRowConfirms());
+  });
+  el.recentList.querySelectorAll(".row-yes").forEach((b) => {
     b.addEventListener("click", () => forget(history[+b.dataset.i].url));
+  });
+}
+
+// Return every row to its rest state (actions shown, confirm hidden).
+function resetRowConfirms() {
+  el.recentList.querySelectorAll("li").forEach((li) => {
+    const actions = li.querySelector(".row-actions");
+    const confirm = li.querySelector(".row-confirm");
+    if (actions) actions.hidden = false;
+    if (confirm) confirm.hidden = true;
   });
 }
 

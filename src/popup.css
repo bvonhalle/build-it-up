@@ -412,6 +412,21 @@ body {
 
 .recent-list .row-del:hover { color: var(--danger); background: none; }
 
+/* Row actions and their per-row remove confirm share the slot on the right;
+   only one shows at a time. Both carry a display rule, so both must restore
+   [hidden] (same guard the clear-all controls need). */
+.row-actions,
+.row-confirm {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.row-confirm { gap: 2px; }
+
+.row-actions[hidden],
+.row-confirm[hidden] { display: none; }
+
 .recent-head {
   display: flex;
   justify-content: flex-end;
