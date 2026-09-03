@@ -420,6 +420,10 @@ body {
   margin: 4px 0 2px;
 }
 
+/* The display rules above beat the [hidden] UA default, so restore it —
+   same guard the prompt slot needs. */
+.recent-head[hidden] { display: none; }
+
 .linkish {
   font-size: 10.5px;
   font-weight: 600;
@@ -441,6 +445,8 @@ body {
   font-size: 10.5px;
   color: var(--muted);
 }
+
+.clear-confirm[hidden] { display: none; }
 
 .empty { font-size: 11px; color: var(--muted); padding: 6px 0; }
 
