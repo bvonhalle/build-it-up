@@ -31,6 +31,7 @@ FIELDS.forEach((f) => { inputs[f] = document.getElementById("f-" + f); });
 let taxonomy = { ...DEFAULT_TAXONOMY };
 let history = [];
 let lastUrl = null;
+let lastUsed = null;
 
 /* ---------- prompt: one slot, one pattern ---------- */
 
@@ -70,6 +71,46 @@ el.promptDismiss.addEventListener("click", () => {
   hidePrompt();
   if (act) act();
 });
+
+/* ---------- last-used restore ---------- */
+
+// Fresh/reuse is a flip, not a checkbox: the prompt always states the
+// current state and offers the other one. It shares the prompt slot's
+// markup, so it never stacks with a parse or dupe offer.
+
+function showReusingPrompt() {
+  showPrompt({
+    kind: "restore",
+    html: "Reusing your last values",
+    accept: "Clear",
+    onAccept: () => {
+      FIELDS.forEach((f) => { inputs[f].value = ""; });
+      renderPreview();
+      showFreshPrompt();
+    },
+    onDismiss: () => {}
+  });
+}
+
+function showFreshPrompt() {
+  showPrompt({
+    kind: "restore",
+    html: "Starting fresh",
+    accept: "Use last values",
+    onAccept: () => {
+      FIELDS.forEach((f) => { inputs[f].value = (lastUsed && lastUsed[f]) || ""; });
+      renderPreview();
+      showReusingPrompt();
+    },
+    onDismiss: () => {}
+  });
+}
+
+async function saveLastUsed() {
+  lastUsed = {};
+  FIELDS.forEach((f) => { lastUsed[f] = normalize(inputs[f].value); });
+  await chrome.storage.local.set({ lastUsed });
+}
 
 /* ---------- paste to parse ---------- */
 
@@ -250,9 +291,10 @@ function renderPreview() {
 /* ---------- storage ---------- */
 
 async function load() {
-  const got = await chrome.storage.local.get(["taxonomy", "history"]);
+  const got = await chrome.storage.local.get(["taxonomy", "history", "lastUsed"]);
   taxonomy = { ...DEFAULT_TAXONOMY, ...(got.taxonomy || {}) };
   history = got.history || [];
+  lastUsed = got.lastUsed || null;
   FIELDS.forEach(fillDatalist);
   renderRecent();
 }
@@ -352,6 +394,7 @@ el.copy.addEventListener("click", async () => {
   el.copy.classList.add("done");
   await learn();
   await remember(lastUrl);
+  await saveLastUsed();
   setTimeout(() => {
     el.copy.textContent = "Copy link";
     el.copy.classList.remove("done");
@@ -373,6 +416,11 @@ document.addEventListener("keydown", (e) => {
 
 (async function init() {
   await Promise.all([load(), prefillFromTab()]);
+  if (lastUsed && FIELDS.every((f) => !inputs[f].value.trim())) {
+    FIELDS.forEach((f) => { inputs[f].value = lastUsed[f] || ""; });
+    showReusingPrompt();
+  }
   renderPreview();
-  inputs.source.focus();
+  el.dest.focus();
+  el.dest.select();
 })();

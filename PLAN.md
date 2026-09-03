@@ -16,6 +16,8 @@ Each card: `ID · title · where the work happens · done-when`
 - L-04 · Icon set from sigil geometry (`icon.svg`, `icons/*.png`) · Code · 3 Sep
 - L-06 · Ghost features decided: build last-used restore + fresh/reuse swap, strike destination "Use tab" · project chat · 3 Sep
   Follow-up: edit the brief's v0.2.0 "Shipped features" list to match (part of L-07).
+- L-07 · Build last-used restore + fresh/reuse swap · Code · 3 Sep
+  Values restore across popup close/open; the prompt slot shows "Reusing your last values · Clear", flipping to "Starting fresh · Use last values" on click. Outstanding: the brief's v0.2.0 "Shipped features" list still needs the matching edit (lives outside this repo).
 
 ## Doing
 
@@ -24,17 +26,15 @@ Each card: `ID · title · where the work happens · done-when`
 
 ## Next
 
-1. L-07 · Build last-used restore + fresh/reuse swap · Code
-   Done when values restore across popup close/open, the swap control shows current state and offers the flip, the restored state is announced (not silent), and the brief's shipped list is corrected.
-2. L-08 · Repo (public, MIT): `git init`, layout, `tools/make-icons.py`, `CHANGELOG.md` · Code
+1. L-08 · Repo (public, MIT): `git init`, layout, `tools/make-icons.py`, `CHANGELOG.md` · Code
    Done when `main` is pushed and `zip -r` of `src/` loads unpacked with no console errors.
-3. L-09 · Privacy policy on GitHub Pages · draft in project chat, publish from Code
+2. L-09 · Privacy policy on GitHub Pages · draft in project chat, publish from Code
    Done when the URL is live and says: no data leaves the machine, `activeTab` + `storage` only.
-4. L-10 · Reshoot 3 × 1280×800 screenshots against the real build · you
+3. L-10 · Reshoot 3 × 1280×800 screenshots against the real build · you
    Done when nothing in a screenshot is absent from the source.
-5. L-11 · Listing copy: title, summary, description, keywords · project chat
+4. L-11 · Listing copy: title, summary, description, keywords · project chat
    Done when copy is sentence case, no exclamation marks, and leads with enforcement not URL building.
-6. L-12 · Tag `v0.3.0`, zip, submit for review · Code + Web Store dashboard
+5. L-12 · Tag `v0.3.0`, zip, submit for review · Code + Web Store dashboard
 
 ## Later (post-launch, in priority order)
 
