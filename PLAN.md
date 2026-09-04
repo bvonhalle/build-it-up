@@ -38,6 +38,10 @@ Each card: `ID · title · where the work happens · done-when`
 3. L-11 · Listing copy: title, summary, description, keywords · project chat
    Done when copy is sentence case, no exclamation marks, and leads with enforcement not URL building.
 4. L-12 · Tag `v0.3.0`, zip, submit for review · Code + Web Store dashboard
+   Packaging is automated: pushing a `v*` tag runs `.github/workflows/release.yml`,
+   which validates `src/`, checks the tag matches the manifest version, zips `src/`
+   (manifest at root) and attaches it to a GitHub release. Remaining: create the
+   Web Store item and submit that zip.
 
 ## Later (post-launch, in priority order)
 
@@ -78,3 +82,4 @@ Each card: `ID · title · where the work happens · done-when`
 - 3 Sep · L-06 · Build last-used restore + fresh/reuse swap; strike "Use tab" (paste-to-parse covers refill)
 - 3 Sep · L-13 · GA4 advisory ships in 0.3.1, not before submit — launch velocity first, follow-up release doubles as a maintained-signal
 - 3 Sep · L-08 · Repo is public, MIT
+- 4 Sep · L-12 · Releases are tag-driven (trunk + tags, no release branch); `release.yml` builds and attaches the store zip on `v*` tags
