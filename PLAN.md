@@ -20,23 +20,24 @@ Each card: `ID · title · where the work happens · done-when`
   Values restore across popup close/open; the prompt slot shows "Reusing your last values · Clear", flipping to "Starting fresh · Use last values" on click. Outstanding: the brief's v0.2.0 "Shipped features" list still needs the matching edit (lives outside this repo).
 - L-14 · Remove recent links: per-item × + clear-all, both with inline confirm (popup + options) · Code · 3 Sep
   Popup Recent gains a × on each row that flips that row in place to "Remove · Cancel", and a "Clear all" that flips to "Clear N? · Clear · Cancel"; one row confirms at a time. Options "Clear link history" now arms on first click and reverts if not confirmed. No removal is silent. No new permissions or storage keys — only mutates `history`.
+- L-09 · Privacy policy on GitHub Pages · Code · 3 Sep
+  Live at https://bvonhalle.github.io/build-it-up/. States plainly that nothing leaves the device and covers `activeTab` + `storage`.
+- L-05 · Smoke test unpacked build · Chrome + Code
+  Done when every line in the checklist below passes on a real link. `main` is pushed (github.com/bvonhalle/build-it-up); this checklist's first line is the one remaining piece of L-08 too.
 
 ## Doing
 
-- L-05 · Smoke test unpacked build · Chrome + Code
-  Done when every line in the checklist below passes on a real link.
+
 
 ## Next
 
 1. L-08 · Repo (public, MIT): `git init`, layout, `tools/make-icons.py`, `CHANGELOG.md` · Code
-   Done when `main` is pushed and `zip -r` of `src/` loads unpacked with no console errors.
-2. L-09 · Privacy policy on GitHub Pages · draft in project chat, publish from Code
-   Done when the URL is live and says: no data leaves the machine, `activeTab` + `storage` only.
-3. L-10 · Reshoot 3 × 1280×800 screenshots against the real build · you
+   `main` pushed, layout matches CLAUDE.md, icons generated, CI added. Only remaining: confirm no console errors loading unpacked (see L-05).
+2. L-10 · Reshoot 3 × 1280×800 screenshots against the real build · you
    Done when nothing in a screenshot is absent from the source.
-4. L-11 · Listing copy: title, summary, description, keywords · project chat
+3. L-11 · Listing copy: title, summary, description, keywords · project chat
    Done when copy is sentence case, no exclamation marks, and leads with enforcement not URL building.
-5. L-12 · Tag `v0.3.0`, zip, submit for review · Code + Web Store dashboard
+4. L-12 · Tag `v0.3.0`, zip, submit for review · Code + Web Store dashboard
 
 ## Later (post-launch, in priority order)
 
