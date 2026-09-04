@@ -85,6 +85,9 @@
 
 .opt-actions .primary { flex: 0 0 auto; padding: 9px 18px; }
 
+/* Armed confirming state for the destructive "Clear link history" button. */
+.ghost.danger { color: var(--danger); border-color: var(--danger); }
+
 .status {
   font-size: 11.5px;
   color: var(--c-medium);

@@ -18,6 +18,12 @@ const el = {
   fixNote: document.getElementById("fixNote"),
   recentList: document.getElementById("recentList"),
   recentCount: document.getElementById("recentCount"),
+  recentHead: document.getElementById("recentHead"),
+  clearRecent: document.getElementById("clearRecent"),
+  clearConfirm: document.getElementById("clearConfirm"),
+  clearCount: document.getElementById("clearCount"),
+  clearYes: document.getElementById("clearYes"),
+  clearNo: document.getElementById("clearNo"),
   openOptions: document.getElementById("openOptions"),
   prompt: document.getElementById("prompt"),
   promptText: document.getElementById("promptText"),
@@ -331,21 +337,80 @@ async function remember(url) {
   renderRecent();
 }
 
+// Removal is always a confirmed flip, never silent: one link behind the row ×,
+// the whole list behind clear-all. Both just mutate the same history array.
+async function forget(url) {
+  history = history.filter((h) => h.url !== url);
+  await chrome.storage.local.set({ history });
+  renderRecent();
+}
+
+async function clearAllRecent() {
+  history = [];
+  await chrome.storage.local.set({ history });
+  renderRecent();
+}
+
+// The clear-all control is a flip in place: "Clear all" swaps for
+// "Clear N? · Clear · Cancel". Every render resets it to rest so a stale
+// confirm never lingers after the list changes underneath it.
+function resetClearConfirm() {
+  el.clearConfirm.hidden = true;
+  el.clearRecent.hidden = false;
+}
+
 function renderRecent() {
   el.recentCount.textContent = history.length ? `(${history.length})` : "";
+  el.recentHead.hidden = !history.length;
+  resetClearConfirm();
   if (!history.length) {
     el.recentList.innerHTML = `<li class="empty">Links you build will collect here.</li>`;
     return;
   }
   el.recentList.innerHTML = history
-    .map((h, i) => `<li><span class="snip" title="${escapeHtml(h.url)}">${escapeHtml(h.url)}</span><button data-i="${i}">Copy</button></li>`)
+    .map((h, i) => `<li><span class="snip" title="${escapeHtml(h.url)}">${escapeHtml(h.url)}</span>`
+      + `<span class="row-actions">`
+      + `<button class="row-copy" data-i="${i}">Copy</button>`
+      + `<button class="row-del" data-i="${i}" title="Remove this link" aria-label="Remove this link">&times;</button>`
+      + `</span>`
+      + `<span class="row-confirm" hidden>`
+      + `<button class="linkish danger row-yes" data-i="${i}">Remove</button>`
+      + `<button class="linkish row-no" type="button">Cancel</button>`
+      + `</span></li>`)
     .join("");
-  el.recentList.querySelectorAll("button").forEach((b) => {
+  el.recentList.querySelectorAll(".row-copy").forEach((b) => {
     b.addEventListener("click", async () => {
       await navigator.clipboard.writeText(history[+b.dataset.i].url);
       b.textContent = "Copied";
       setTimeout(() => { b.textContent = "Copy"; }, 1200);
     });
+  });
+  // The row × flips that one row in place — "Remove · Cancel" — the same
+  // two-step as clear-all, so no removal is silent. Only one row confirms at a
+  // time; opening a new one closes any other.
+  el.recentList.querySelectorAll(".row-del").forEach((b) => {
+    b.addEventListener("click", () => {
+      resetRowConfirms();
+      const li = b.closest("li");
+      li.querySelector(".row-actions").hidden = true;
+      li.querySelector(".row-confirm").hidden = false;
+    });
+  });
+  el.recentList.querySelectorAll(".row-no").forEach((b) => {
+    b.addEventListener("click", () => resetRowConfirms());
+  });
+  el.recentList.querySelectorAll(".row-yes").forEach((b) => {
+    b.addEventListener("click", () => forget(history[+b.dataset.i].url));
+  });
+}
+
+// Return every row to its rest state (actions shown, confirm hidden).
+function resetRowConfirms() {
+  el.recentList.querySelectorAll("li").forEach((li) => {
+    const actions = li.querySelector(".row-actions");
+    const confirm = li.querySelector(".row-confirm");
+    if (actions) actions.hidden = false;
+    if (confirm) confirm.hidden = true;
   });
 }
 
@@ -407,6 +472,16 @@ el.reset.addEventListener("click", () => {
   renderPreview();
   inputs.source.focus();
 });
+
+el.clearRecent.addEventListener("click", () => {
+  el.clearCount.textContent = history.length;
+  el.clearRecent.hidden = true;
+  el.clearConfirm.hidden = false;
+});
+
+el.clearNo.addEventListener("click", resetClearConfirm);
+
+el.clearYes.addEventListener("click", () => clearAllRecent());
 
 el.openOptions.addEventListener("click", () => chrome.runtime.openOptionsPage());
 

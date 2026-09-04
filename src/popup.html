@@ -82,6 +82,14 @@
 
   <details class="recent">
     <summary>Recent links <span id="recentCount" class="count"></span></summary>
+    <div id="recentHead" class="recent-head" hidden>
+      <button id="clearRecent" class="linkish" type="button">Clear all</button>
+      <span id="clearConfirm" class="clear-confirm" hidden>
+        Clear <span id="clearCount"></span>?
+        <button id="clearYes" type="button" class="linkish danger">Clear</button>
+        <button id="clearNo" type="button" class="linkish">Cancel</button>
+      </span>
+    </div>
     <ul id="recentList" class="recent-list"></ul>
   </details>
 
