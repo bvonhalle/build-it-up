@@ -1,0 +1,41 @@
+name: release
+
+# Cut a store package on a version tag. Push v0.3.0 (etc.) and this
+# validates src/, checks the tag matches the manifest version, zips src/
+# with manifest.json at the archive root, and attaches it to a GitHub
+# release. The zip is the exact bytes to upload to the Web Store.
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate src/
+        run: python3 tools/check-src.py
+
+      - name: Package src/ (tag must match manifest version)
+        run: |
+          version="$(python3 -c "import json; print(json.load(open('src/manifest.json'))['version'])")"
+          tag="${GITHUB_REF_NAME#v}"
+          if [ "$tag" != "$version" ]; then
+            echo "::error::Tag ${GITHUB_REF_NAME} does not match manifest version ${version}"
+            exit 1
+          fi
+          ( cd src && zip -rX "../build-it-up-${version}.zip" . -x '.*' '**/.*' )
+          echo "ZIP=build-it-up-${version}.zip" >> "$GITHUB_ENV"
+
+      - name: Create GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" "$ZIP" \
+            --title "$GITHUB_REF_NAME" \
+            --generate-notes
